@@ -6,7 +6,8 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(stm32_pm_blinky)
 
 
-target_sources(app PRIVATE src/main_transceive.cpp)
+target_sources(app PRIVATE src/transceive_master.cpp)
+# target_sources(app PRIVATE src/transceive_slave.cpp)
 
 target_include_directories(app PUBLIC external/PX4-Matrix)
 
