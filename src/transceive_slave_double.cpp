@@ -3,12 +3,12 @@
 #include <stdio.h>
 
 int spi_master_transceive(const struct device *spi, struct spi_config *spi_cfg,
-                          uint16_t *tx_data, uint16_t *rx_data) {
+                          double *tx_data, double *rx_data) {
 
-  struct spi_buf tx_bufs = {.buf = tx_data, .len = 2};
+  struct spi_buf tx_bufs = {.buf = tx_data, .len = 4};
   struct spi_buf_set tx = {.buffers = &tx_bufs};
 
-  struct spi_buf rx_bufs = {.buf = rx_data, .len = 2};
+  struct spi_buf rx_bufs = {.buf = rx_data, .len = 4};
   struct spi_buf_set rx = {.buffers = &rx_bufs};
 
   tx.count = 1;
@@ -19,8 +19,8 @@ int spi_master_transceive(const struct device *spi, struct spi_config *spi_cfg,
 
 void main() {
   // Data to be exchanged
-  uint16_t tx_data = 6;
-  uint16_t rx_data = 2;
+  double tx_data = 3.655;
+  double rx_data = 5.133;
 
   // Initialize SPI bus number 3
   const struct device *spi = device_get_binding("SPI_1");
@@ -35,16 +35,14 @@ void main() {
 
   // SPI COnfiguration
   struct spi_config spi_cfg {
-    .frequency = 8000000,
-    .operation = SPI_WORD_SET(16) | SPI_TRANSFER_MSB | SPI_OP_MODE_MASTER
+    .frequency = 8000000, .operation = SPI_WORD_SET(16) | SPI_OP_MODE_SLAVE
     // , .cs = &cs_ctrl
   };
 
   while (1) {
 
     spi_master_transceive(spi, &spi_cfg, &tx_data, &rx_data);
-    printf("Sent: %d\n", tx_data);
-    printf("Received: %d\n\n", rx_data);
-    k_sleep(K_TIMEOUT_ABS_MS(1));
+    printf("Sent: %f\n", tx_data);
+    printf("Received: %f\n\n", rx_data);
   }
 }
