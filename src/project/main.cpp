@@ -35,7 +35,7 @@ int main() {
   // feedforward thrust = - g
   float ff_thrust = 9.81;
 
-  double tx_data = 0;
+  double tx_data = 4;
   double rx_data = 0;
 
   for (int i = 0; i < euler_steps; i++) {
