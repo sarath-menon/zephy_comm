@@ -1,12 +1,10 @@
 #include <device.h>
 #include <drivers/uart.h>
+#include <soc.h>
 #include <stdio.h>
+#include <string.h>
 
-// int uart_send_bytes(const struct device *uart, const uint8_t *tx_data,
-//                     size_t len, int32_t timeout) {
-
-//   return uart_tx(uart, tx_data, len, timeout);
-// }
+static const char *poll_data = "This is a POLL test.\r\n";
 
 void main() {
   // Data to be exchanged
@@ -16,19 +14,16 @@ void main() {
   const struct device *uart = device_get_binding("UART_2");
 
   // Initialize UART 1 [Pin 9:Tx, Pin 10: Rx]
-  //   const struct device *uart = device_get_binding("UART_1");
-
-  uint8_t data[8];
-  for (int i = 0; i < 8; i++) {
-    data[i] = 'x';
-  }
+  // const struct device *uart = device_get_binding("UART_1");
 
   while (1) {
 
     // uart_poll_out(uart, test_char);
-
-    int status = uart_tx(uart, data, sizeof(data), 1000);
-    printf("Sent: %d\n", status);
+    for (int i = 0; i < strlen(poll_data); i++) {
+      uart_poll_out(uart, poll_data[i]);
+    }
+    // int status = uart_tx(uart, data, sizeof(data), 1000);
+    // printf("Sent: %d\n", status);
 
     k_sleep(K_TIMEOUT_ABS_MS(250));
   }
